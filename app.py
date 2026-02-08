@@ -140,7 +140,7 @@ model_options = [
     if f.endswith(".pkl") and f not in ["preprocessor.pkl", "features.pkl"]
 ]
 
-selected_model = st.selectbox("Select Model", model_options)
+selected_model = st.selectbox("Select Model", model_options).lower()
 
 if st.button("Predict Churn"):
     model = load_model(selected_model)
