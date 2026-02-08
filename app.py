@@ -240,8 +240,4 @@ if y_true is not None:
             plt.tight_layout()
             st.pyplot(fig)
 
-        with col_right:
-            st.markdown("**Classification Report**")
-            report = classification_report(y_true, y_pred, output_dict=True)
-            st.dataframe(pd.DataFrame(report).transpose(), height=250)
 
