@@ -1,0 +1,11 @@
+CustomerID,Tenure,PreferredLoginDevice,CityTier,WarehouseToHome,PreferredPaymentMode,Gender,HourSpendOnApp,NumberOfDeviceRegistered,PreferedOrderCat,SatisfactionScore,MaritalStatus,NumberOfAddress,Complain,OrderAmountHikeFromlastYear,CouponUsed,OrderCount,DaySinceLastOrder,CashbackAmount,Churn
+50179,4.0,Mobile Phone,3,13.0,Cash on Delivery,Male,3.0,2,Laptop & Accessory,2,Divorced,5,0,11.0,3.0,7.0,7.0,169,0
+55628,1.0,Mobile Phone,1,11.0,Debit Card,Male,3.0,2,Laptop & Accessory,4,Married,3,1,21.0,1.0,2.0,4.0,186,0
+54137,8.0,Mobile Phone,3,35.0,E wallet,Female,4.0,5,Laptop & Accessory,3,Married,3,0,22.0,2.0,2.0,8.0,192,0
+52349,0.0,Mobile Phone,1,7.0,Cash on Delivery,Male,2.0,3,Mobile Phone,1,Married,5,0,11.0,0.0,1.0,2.0,132,0
+50643,10.0,Mobile Phone,1,9.0,UPI,Female,2.0,3,Laptop & Accessory,4,Single,4,0,15.0,1.0,1.0,1.0,141,0
+53586,5.0,Mobile Phone,1,18.0,Credit Card,Male,4.0,4,Laptop & Accessory,5,Divorced,3,1,13.0,1.0,2.0,2.0,193,0
+54058,1.0,Mobile Phone,1,9.0,Cash on Delivery,Male,3.0,4,Mobile Phone,4,Married,3,0,12.0,2.0,2.0,3.0,147,0
+51876,0.0,Mobile Phone,1,6.0,Debit Card,Female,3.0,3,Fashion,5,Married,2,0,11.0,0.0,1.0,7.0,174,0
+55082,2.0,Computer,1,8.0,Credit Card,Male,3.0,4,Mobile Phone,3,Single,2,1,12.0,2.0,2.0,3.0,147,0
+54164,7.0,Computer,1,10.0,Debit Card,Female,3.0,4,Mobile Phone,3,Married,3,1,12.0,3.0,4.0,1.0,154,0
