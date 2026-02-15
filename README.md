@@ -181,7 +181,7 @@ bits-ml-classification-model/
 
 The application is deployed on **Streamlit Community Cloud** and can be accessed at:
 
-**Live App URL:** [Add your Streamlit app URL here]
+**Live App URL:** https://debashisgho-ml-classification-model.streamlit.app/
 
 ## Usage Instructions
 
@@ -222,5 +222,5 @@ This project is created for academic purposes as part of BITS Pilani M.Tech cour
 ## Acknowledgments
 
 - BITS Pilani Work Integrated Learning Programmes Division
-- Dataset source: [Add source]
+- Dataset source: https://www.kaggle.com/datasets/muhammadshahidazeem/customer-churn-dataset/data
 - Streamlit Community for deployment platform
