@@ -26,17 +26,33 @@ st.set_page_config(
     layout="wide"
 )
 
+# Custom CSS for blue buttons and compact header
+st.markdown("""
+<style>
+    .stButton > button[kind="primary"] {
+        background-color: #1E88E5;
+        color: white;
+    }
+    .stButton > button[kind="primary"]:hover {
+        background-color: #1565C0;
+        color: white;
+    }
+    /* Reduce top padding */
+    .block-container {
+        padding-top: 2rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # -------------------------------------------------
 # HEADER
 # -------------------------------------------------
 
-header_col1, header_col2, header_col3 = st.columns([1, 6, 1])
-
-with header_col2:
-    st.markdown("""
-#### 📉 Ecommerce Customer Churn Prediction
-<small>Predict churn risk using ML models trained on customer behavior.</small>  
-<small><i>BITS Pilani – ML Assignment 2 | Debashis Ghosh (2025AA05806)</i></small>
+st.markdown("""
+<div style='text-align: center; padding: 0.5rem 0 1rem 0;'>
+    <h3 style='margin: 0;'>📉 Ecommerce Customer Churn Prediction</h3>
+    <p style='color: #666; margin: 0.2rem 0 0 0; font-size: 0.9rem;'>Predict churn risk using ML models | <i>BITS Pilani – Debashis Ghosh (2025AA05806)</i></p>
+</div>
 """, unsafe_allow_html=True)
 
 
@@ -85,7 +101,8 @@ numeric_cols = [
 
 
 def get_user_inputs():
-    st.sidebar.markdown("## Customer Profile")
+    st.sidebar.markdown("### 👤 Customer Profile")
+    st.sidebar.markdown("---")
 
     data = {
         "Gender": st.sidebar.selectbox("Gender", ["Female", "Male"]),
@@ -133,7 +150,8 @@ input_df = get_user_inputs()
 # -------------------------------------------------
 # SINGLE PREDICTION
 # -------------------------------------------------
-st.subheader("Prediction Interface")
+st.markdown("### 🎯 Single Customer Prediction")
+st.markdown("")
 
 model_options = [
     f.replace(".pkl", "").replace("_", " ").title()
@@ -141,9 +159,14 @@ model_options = [
     if f.endswith(".pkl") and f not in ["preprocessor.pkl", "features.pkl"]
 ]
 
-selected_model = st.selectbox("Select Model", model_options).lower()
+col1, col2 = st.columns([2, 1])
+with col1:
+    selected_model = st.selectbox("🤖 Select Model", model_options).lower()
+with col2:
+    st.markdown("<div style='margin-top: 1.8rem;'></div>", unsafe_allow_html=True)
+    predict_btn = st.button("🔮 Predict Churn", use_container_width=True, type="primary")
 
-if st.button("Predict Churn"):
+if predict_btn:
     model = load_model(selected_model)
     input_scaled = preprocessor.transform(input_df)
 
@@ -153,30 +176,33 @@ if st.button("Predict Churn"):
         if hasattr(model, "predict_proba") else 0
     )
 
+    st.markdown("")
     if prediction == 1:
-        st.error(f"High Churn Risk (Probability: {probability:.2%})")
+        st.error(f"⚠️ **High Churn Risk** — Probability: {probability:.2%}")
     else:
-        st.success(f"Low Churn Risk (Probability: {probability:.2%})")
+        st.success(f"✅ **Low Churn Risk** — Probability: {probability:.2%}")
 
 
 # -------------------------------------------------
 # BATCH PREDICTION
 # -------------------------------------------------
-st.divider()
-st.subheader("Batch Prediction")
+st.markdown("---")
+st.markdown("### 📊 Batch Prediction")
+st.markdown("")
 
 # Initialize variables to avoid NameError
 y_true = None
 y_pred = None
 
 
-uploaded_file = st.file_uploader("Upload CSV", type="csv")
+uploaded_file = st.file_uploader("📁 Upload CSV file with customer data", type="csv")
 
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
-    st.dataframe(data.head())
+    with st.expander("📋 Preview Uploaded Data", expanded=False):
+        st.dataframe(data.head(), use_container_width=True)
 
-    if st.button("Run Batch Prediction"):
+    if st.button("▶️ Run Batch Prediction", type="primary"):
         model = load_model(selected_model)
 
         y_true = data.pop("Churn") if "Churn" in data.columns else None
@@ -194,7 +220,8 @@ if uploaded_file:
         # model.predict_proba(X_scaled)[:, 1] if hasattr(model, "predict_proba") else y_pred
         # )
 
-        st.success("Predictions generated")
+        st.success("✅ Predictions generated successfully!")
+        st.markdown("")
 
         result = pd.DataFrame({
             "Customer ID": customer_ids,
@@ -202,14 +229,17 @@ if uploaded_file:
             "Predicted": y_pred
         })
 
-        st.dataframe(result, height = 200)
+        st.markdown("**📈 Prediction Results**")
+        st.dataframe(result, height=200, use_container_width=True)
 
         # Metrics
 
 if y_true is not None:
-    with st.expander("Model Performance Report", expanded=False):
+    st.markdown("")
+    with st.expander("📊 Model Performance Report", expanded=True):
 
         # --- Metrics ---
+        st.markdown("**Performance Metrics**")
         c1, c2, c3, c4, c5, c6 = st.columns(6)
         c1.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.2%}")
         c2.metric("AUC", f"{roc_auc_score(y_true, y_prob):.2%}")
@@ -218,16 +248,18 @@ if y_true is not None:
         c5.metric("F1 Score", f"{f1_score(y_true, y_pred):.2%}")
         c6.metric("MCC", f"{matthews_corrcoef(y_true, y_pred):.2%}")
 
-        st.divider()
+        st.markdown("")
+        st.markdown("---")
 
-        # --- Confusion Matrix + Report ---
-        col_left, col_right = st.columns([1, 1])
-
-        with col_left:
-            st.markdown("**Confusion Matrix**")
+        # --- Confusion Matrix ---
+        st.markdown("**📉 Confusion Matrix**")
+        
+        col_left, col_center, col_right = st.columns([1, 2, 1])
+        
+        with col_center:
             cm = confusion_matrix(y_true, y_pred)
 
-            fig, ax = plt.subplots(figsize=(4.5, 3.5))
+            fig, ax = plt.subplots(figsize=(6, 5))
 
             sns.heatmap(
                 cm,
@@ -235,18 +267,19 @@ if y_true is not None:
                 fmt="d",
                 cmap="Blues",
                 cbar=False,
-                annot_kws={"size": 9, "weight": "bold"},
-                linewidths=0.5,
-                linecolor="gray",
-                ax=ax
+                annot_kws={"size": 12},
+                linewidths=1,
+                linecolor="white",
+                ax=ax,
+                square=True
             )
 
-            ax.set_title("Confusion Matrix", fontsize=11, weight="bold", pad=10)
-            ax.set_xlabel("Predicted Label", fontsize=9)
-            ax.set_ylabel("Actual Label", fontsize=9)
+            ax.set_title("Confusion Matrix", fontsize=11, pad=12)
+            ax.set_xlabel("Predicted Label", fontsize=10)
+            ax.set_ylabel("Actual Label", fontsize=10)
 
-            ax.set_xticklabels(["No Churn", "Churn"], fontsize=8)
-            ax.set_yticklabels(["No Churn", "Churn"], fontsize=8, rotation=0)
+            ax.set_xticklabels(["No Churn", "Churn"], fontsize=9)
+            ax.set_yticklabels(["No Churn", "Churn"], fontsize=9, rotation=0)
 
             plt.tight_layout()
             st.pyplot(fig)
