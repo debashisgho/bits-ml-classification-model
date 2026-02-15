@@ -18,7 +18,7 @@ from sklearn.metrics import (
 # -------------------------------------------------
 # CONFIG
 # -------------------------------------------------
-MODEL_PATH = "./output-model"
+MODEL_PATH = "./model"
 
 st.set_page_config(
     page_title="Customer Churn Prediction",
@@ -161,10 +161,10 @@ model_options = [
 
 col1, col2 = st.columns([2, 1])
 with col1:
-    selected_model = st.selectbox("🤖 Select Model", model_options).lower()
+    selected_model = st.selectbox(" Select Model", model_options).lower()
 with col2:
     st.markdown("<div style='margin-top: 1.8rem;'></div>", unsafe_allow_html=True)
-    predict_btn = st.button("🔮 Predict Churn", use_container_width=True, type="primary")
+    predict_btn = st.button("▶️ Predict Churn", use_container_width=True, type="primary")
 
 if predict_btn:
     model = load_model(selected_model)
