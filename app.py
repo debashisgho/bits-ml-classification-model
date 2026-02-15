@@ -8,10 +8,11 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
-    classification_report,
     precision_score,
     recall_score,
     f1_score,
+    roc_auc_score,
+    matthews_corrcoef
 )
 
 # -------------------------------------------------
@@ -185,6 +186,14 @@ if uploaded_file:
         X_scaled = preprocessor.transform(data)
         y_pred = model.predict(X_scaled)
 
+        proba = model.predict_proba(X_scaled)
+        pos_class_index = list(model.classes_).index(1)
+        y_prob = proba[:, pos_class_index]
+
+        # y_prob = (
+        # model.predict_proba(X_scaled)[:, 1] if hasattr(model, "predict_proba") else y_pred
+        # )
+
         st.success("Predictions generated")
 
         result = pd.DataFrame({
@@ -193,7 +202,7 @@ if uploaded_file:
             "Predicted": y_pred
         })
 
-        st.dataframe(result)
+        st.dataframe(result, height = 200)
 
         # Metrics
 
@@ -201,11 +210,13 @@ if y_true is not None:
     with st.expander("Model Performance Report", expanded=False):
 
         # --- Metrics ---
-        c1, c2, c3, c4 = st.columns(4)
+        c1, c2, c3, c4, c5, c6 = st.columns(6)
         c1.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.2%}")
-        c2.metric("Precision", f"{precision_score(y_true, y_pred):.2%}")
-        c3.metric("Recall", f"{recall_score(y_true, y_pred):.2%}")
-        c4.metric("F1 Score", f"{f1_score(y_true, y_pred):.2%}")
+        c2.metric("AUC", f"{roc_auc_score(y_true, y_prob):.2%}")
+        c3.metric("Precision", f"{precision_score(y_true, y_pred):.2%}")
+        c4.metric("Recall", f"{recall_score(y_true, y_pred):.2%}")
+        c5.metric("F1 Score", f"{f1_score(y_true, y_pred):.2%}")
+        c6.metric("MCC", f"{matthews_corrcoef(y_true, y_pred):.2%}")
 
         st.divider()
 
