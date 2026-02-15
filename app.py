@@ -165,7 +165,7 @@ with col1:
 with col2:
     st.markdown("<div style='margin-top: 1.8rem;'></div>", unsafe_allow_html=True)
     predict_btn = st.button("▶️ Predict Churn", use_container_width=True, type="primary")
-
+ 
 if predict_btn:
     model = load_model(selected_model)
     input_scaled = preprocessor.transform(input_df)
@@ -194,8 +194,24 @@ st.markdown("")
 y_true = None
 y_pred = None
 
+# Download sample data button
+col_download, col_upload  = st.columns([1, 2])
 
-uploaded_file = st.file_uploader("📁 Upload CSV file with customer data", type="csv")
+with col_upload:
+    uploaded_file = st.file_uploader("📁 Upload CSV file with customer data", type="csv")
+
+with col_download:
+    st.markdown("<div style='margin-top: 1.8rem;'></div>", unsafe_allow_html=True)
+    sample_file_path = "./data/raw/Full_test_raw.csv"
+    if os.path.exists(sample_file_path):
+        with open(sample_file_path, "rb") as f:
+            st.download_button(
+                label="⬇️ Download Sample",
+                data=f,
+                file_name="sample_test_data.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
 
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
