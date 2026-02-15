@@ -33,7 +33,7 @@ Customer churn is a critical challenge for e-commerce businesses, as retaining e
 17. **CityTier** - City tier classification (1, 2, or 3)
 18. **NumberOfAddress** - Number of addresses registered
 
-## Models Used & Performance Metrics
+## Models Used
 
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 Score | MCC |
 |--------------|----------|-----|-----------|--------|----------|-----|
